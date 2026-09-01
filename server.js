@@ -115,7 +115,7 @@ async function sendWhatsApp(to, text) {
   });
 }
 
-// === WEBHOOK VERIFICATION ===
+// === WEBHOOK VERIFICATION (pour Meta)
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] === 'neolifeid75') {
     res.send(req.query['hub.challenge']);
@@ -124,29 +124,16 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-// === WEBHOOK PRINCIPAL - CORRIGÉ ===
+// === WEBHOOK PRINCIPAL ===
 app.post('/webhook', async (req, res) => {
-  res.sendStatus(200); // On répond vite à Meta
   try {
     const entry = req.body.entry?.[0]?.changes?.[0]?.value;
     const msg = entry?.messages?.[0];
-    if (!msg) return;
+    if (!msg) return res.sendStatus(200);
 
     const from = msg.from;
     let userText = msg.text?.body || msg.button?.text || msg.interactive?.button_reply?.title || "";
     const token = process.env.WHATSAPP_TOKEN;
-
-    // CAS VOCAL
-    if (msg.type === 'audio' || msg.type === 'voice') {
-      console.log("🎙️ Vocal reçu");
-      const transcribed = await transcribeVoice(msg.audio?.id || msg.voice?.id);
-      if (transcribed) {
-        userText = transcribed;
-        console.log("Transcription:", userText);
-      } else {
-        userText = "Le client a envoyé un vocal illisible.";
-      }
-    }
 
     // CAS IMAGE - C'EST ICI QU'IL ÉTAIT DEHORS AVANT
     if (msg.type === 'image') {
@@ -162,7 +149,7 @@ app.post('/webhook', async (req, res) => {
       } else {
         userText = "Le client a envoyé une photo illisible. Demande-lui le nom du produit.";
       }
-    }
+        }
 
     // TRAITEMENT FINAL
     let reply = "";
@@ -182,13 +169,9 @@ app.post('/webhook', async (req, res) => {
 
     console.log(`📤 A ${from}: ${reply}`);
     await sendWhatsApp(from, reply);
-
-  } catch (e) {
-    console.error("Erreur webhook", e.message);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Erreur webhook", err.message);
+    res.sendStatus(200);
   }
 });
-
-app.get('/', (req, res) => res.send('LIA V5 - Internationale Vocale + Vision OK'));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`LIA V5 en ligne sur port ${PORT}`));
