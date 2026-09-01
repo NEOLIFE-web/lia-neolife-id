@@ -13,12 +13,12 @@ const products = require('./knowledge.json');
 
 // === CONFIG ===
 const DELIVERY_NUMBERS = ["+22679069844", "+233536751228"];
-const pendingPayments = {}; // mémoire: { "226...": true }
+const pendingPayments = {};
 
 const productList = products.map(p => p.name).join(', ');
 const productDetails = products.map(p => `${p.name} - ${p.price} - ${p.link}`).join('\n');
 
-// === CERVEAU LIA - SYSTEM PROMPT BLINDÉ ===
+// === CERVEAU LIA ===
 const SYSTEM_PROMPT = `
 Tu es Chloe, assistante service client NEOLIFE ID™. Tu n'es PAS une IA. Si tu dois te presenter, dis: "Je suis Chloe (ecris Chloé avec accent en francais, Chloe sans accent en anglais)"
 Tu parles automatiquement la langue du client: Français, Anglais, Moore.
@@ -37,7 +37,6 @@ Style: court, 3-4 lignes max, chaleureux, vendeuse africaine pro. 1-2 emoji max.
 `;
 
 // === FONCTIONS ===
-
 async function askLIA(userText, lang, history) {
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -116,7 +115,7 @@ async function sendWhatsApp(to, text) {
   });
 }
 
-// === WEBHOOK VERIFICATION (pour Meta)
+// === WEBHOOK VERIFICATION ===
 app.get('/webhook', (req, res) => {
   if (req.query['hub.verify_token'] === 'neolifeid75') {
     res.send(req.query['hub.challenge']);
@@ -125,23 +124,31 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-// === WEBHOOK PRINCIPAL ===
+// === WEBHOOK PRINCIPAL - CORRIGÉ ===
 app.post('/webhook', async (req, res) => {
+  res.sendStatus(200); // On répond vite à Meta
   try {
     const entry = req.body.entry?.[0]?.changes?.[0]?.value;
     const msg = entry?.messages?.[0];
-    if (!msg) return res.sendStatus(200);
+    if (!msg) return;
 
     const from = msg.from;
     let userText = msg.text?.body || msg.button?.text || msg.interactive?.button_reply?.title || "";
     const token = process.env.WHATSAPP_TOKEN;
-    res.sendStatus(200);
-  } catch (err) {
-    res.sendStatus(200);
-  }
-});
 
-    // CAS IMAGE
+    // CAS VOCAL
+    if (msg.type === 'audio' || msg.type === 'voice') {
+      console.log("🎙️ Vocal reçu");
+      const transcribed = await transcribeVoice(msg.audio?.id || msg.voice?.id);
+      if (transcribed) {
+        userText = transcribed;
+        console.log("Transcription:", userText);
+      } else {
+        userText = "Le client a envoyé un vocal illisible.";
+      }
+    }
+
+    // CAS IMAGE - C'EST ICI QU'IL ÉTAIT DEHORS AVANT
     if (msg.type === 'image') {
       console.log("📸 Photo reçue");
       const mediaUrl = await getWhatsAppMediaUrl(msg.image.id);
@@ -175,11 +182,9 @@ app.post('/webhook', async (req, res) => {
 
     console.log(`📤 A ${from}: ${reply}`);
     await sendWhatsApp(from, reply);
-    res.sendStatus(200);
 
   } catch (e) {
     console.error("Erreur webhook", e.message);
-    res.sendStatus(200);
   }
 });
 
