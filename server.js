@@ -7,6 +7,10 @@ const OpenAI = require('openai');
 
 const app = express();
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.send('LIA V5 - Internationale Vocale + Vision OK');
+});
+
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const products = require('./knowledge.json');
