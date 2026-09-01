@@ -135,14 +135,11 @@ app.post('/webhook', async (req, res) => {
     const from = msg.from;
     let userText = msg.text?.body || msg.button?.text || msg.interactive?.button_reply?.title || "";
     const token = process.env.WHATSAPP_TOKEN;
-
-    // CAS VOCAL
-    if (msg.type === 'audio') {
-      console.log("🎤 Vocal reçu");
-      const transcribed = await transcribeVoice(msg.audio.id);
-      if (transcribed) userText = transcribed;
-      console.log("Transcrit:", userText);
-    }
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(200);
+  }
+});
 
     // CAS IMAGE
     if (msg.type === 'image') {
