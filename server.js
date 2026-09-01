@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const products = require('./knowledge.js');
+const products = require('./knowledge.json');
 
 // === CONFIG ===
 const DELIVERY_NUMBERS = ["+22679069844", "+233536751228"];
