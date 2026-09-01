@@ -116,9 +116,9 @@ async function sendWhatsApp(to, text) {
   });
 }
 
-// === WEBHOOK VERIFICATION (pour Meta) ===
+// === WEBHOOK VERIFICATION (pour Meta)
 app.get('/webhook', (req, res) => {
-  if (req.query['hub.verify_token'] === process.env.VERIFY_TOKEN) {
+  if (req.query['hub.verify_token'] === 'neolifeid75') {
     res.send(req.query['hub.challenge']);
   } else {
     res.sendStatus(403);
