@@ -1,19 +1,19 @@
-// server.js - LIA V5 COMPLET - Internationale + Vocale + Vision + Anti-Piège
+// server.js - LIA V5 COMPLET - Internationale Vocale + Vision
 // NEOLIFE-ID™ - Prêt pour Render
-const { toFile } = require('openai');
 const express = require('express');
 const axios = require('axios');
 const OpenAI = require('openai');
+const fs = require('fs');
 
 const app = express();
 app.use(express.json());
+
 app.get('/', (req, res) => {
   res.send('LIA V5 - Internationale Vocale + Vision OK');
 });
 
-
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const products = require('./knowledge.json');
+const products = require('./knowledge.js');
 
 // === CONFIG ===
 const DELIVERY_NUMBERS = ["+22679069844", "+233536751228"];
