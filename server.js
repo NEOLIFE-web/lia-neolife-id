@@ -1,4 +1,4 @@
-// server.js - LIA V5 OPTIMISÉ
+// server.js - LIA V5 OPTIMISÉ (VERSION CORRIGÉE)
 const express = require('express');
 const axios = require('axios');
 const OpenAI = require('openai');
@@ -139,11 +139,19 @@ app.post('/webhook', async (req, res) => {
     let userText = msg.text?.body || msg.button?.text || msg.interactive?.button_reply?.title || "";
     const token = process.env.WHATSAPP_TOKEN;
 
-    if (!chatHistories[from]) chatHistories[from] = [];
+    // Initialisation unique du chatHistory
+    if (!chatHistories[from]) {
+      chatHistories[from] = [];
+    }
 
     if (msg.type === 'audio' || msg.type === 'voice') {
       const transcribed = await transcribeVoice(msg.audio?.id || msg.voice?.id);
-      userText = transcribed || "Audio non lisible";
+      if (transcribed && transcribed.trim() !== "") {
+        userText = transcribed;
+      } else {
+        await sendWhatsApp(from, "Désolée, je n'ai pas pu bien entendre ton message vocal. Peux-tu me le réécrire par texte ? 😊");
+        return;
+      }
     }
 
     if (msg.type === 'image') {
@@ -159,10 +167,8 @@ app.post('/webhook', async (req, res) => {
       }
     }
 
-    // Initialiser l'historique si première conversation
-if (!chatHistories[from]) {
-  chatHistories[from] = [];
-}
+    if (!userText) return;
+
     let reply = "";
     if (userText === "PREUVE_PAIEMENT_ENVOYEE") {
       const num = DELIVERY_NUMBERS[Math.floor(Math.random() * DELIVERY_NUMBERS.length)];
@@ -202,5 +208,6 @@ app.get('/data-deletion', (req, res) => {
     <p>Vos donnees (historique chat) seront supprimees sous 24h.</p>
   `);
 });
+
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Serveur à l'écoute sur le port ${PORT}`));
