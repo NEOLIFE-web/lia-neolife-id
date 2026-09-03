@@ -104,7 +104,7 @@ async function visionCheck(imageUrl, token) {
 
 async function sendWhatsApp(to, text) {
   const token = process.env.WHATSAPP_TOKEN;
-  const phoneId = process.env.WHATSAPP_PHONE_ID;
+  const phoneId = process.env.WHATSAPP_PHONE_ID || process.env.WHATSAPP_PHONE;
   await axios.post(`https://graph.facebook.com/v20.0/${phoneId}/messages`, {
     messaging_product: "whatsapp",
     to: to,
@@ -115,7 +115,7 @@ async function sendWhatsApp(to, text) {
 }
 
 app.get('/webhook', (req, res) => {
-  if (req.query['hub.verify_token'] === 'neolifeid75') {
+  if (req.query['hub.verify_token'] === (process.env.VERIFY_TOKEN || 'neolifeid75')) {
     res.send(req.query['hub.challenge']);
   } else {
     res.sendStatus(403);
