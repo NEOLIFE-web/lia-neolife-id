@@ -1,4 +1,6 @@
 // server.js - LIA V5 OPTIMISÉ (VERSION CORRIGÉE)
+require('dotenv').config();
+
 const express = require('express');
 const axios = require('axios');
 const OpenAI = require('openai');
