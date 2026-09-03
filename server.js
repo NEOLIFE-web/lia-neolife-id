@@ -159,6 +159,10 @@ app.post('/webhook', async (req, res) => {
       }
     }
 
+    // Initialiser l'historique si première conversation
+if (!chatHistories[from]) {
+  chatHistories[from] = [];
+}
     let reply = "";
     if (userText === "PREUVE_PAIEMENT_ENVOYEE") {
       const num = DELIVERY_NUMBERS[Math.floor(Math.random() * DELIVERY_NUMBERS.length)];
