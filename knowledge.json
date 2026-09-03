@@ -96,7 +96,7 @@
   {"id": "lc30-25l", "name": "LC30 - 25L", "price": "201000F CFA", "price_value": 201000, "category": "Soins à domicile", "link": "https://neolife-id-lions-team.netlify.app/?search=lc30-25l"},
   {"id": "super-gro-1l", "name": "Super Gro 1L - Engrais Organique", "price": "22000F CFA", "price_value": 22000, "category": "Agriculture", "link": "https://neolife-id-lions-team.netlify.app/?search=super-gro-1l"},
   {"id": "super-gro-5l", "name": "Super Gro 5L - Engrais Organique", "price": "70000F CFA", "price_value": 70000, "category": "Agriculture", "link": "https://neolife-id-lions-team.netlify.app/?search=super-gro-5l"},
-  {"id": "neolife-blender-bottle", "name": "NeoLife Blender Bottle", "price": "262000F CFA", "price_value": 262000, "category": "Accessoires", "link": "https://neolife-id-lions-team.netlify.app/?search=neolife-blender-bottle"},
+  {"id": "neolife-blender-bottle", "name": "NeoLife Blender Bottle", "price": "5000F CFA", "price_value": 5000, "category": "Accessoires", "link": "https://neolife-id-lions-team.netlify.app/?search=neolife-blender-bottle"},
   {"id": "neolife-water-bottle", "name": "NeoLife Water Bottle", "price": "8000F CFA", "price_value": 8000, "category": "Accessoires", "link": "https://neolife-id-lions-team.netlify.app/?search=neolife-water-bottle"},
   {"id": "hand-sprayer-bottle", "name": "Hand Sprayer & Bottle", "price": "3000F CFA", "price_value": 3000, "category": "Accessoires", "link": "https://neolife-id-lions-team.netlify.app/?search=hand-sprayer-bottle"},
   {"id": "mixing-bottle", "name": "Mixing Bottle", "price": "800F CFA", "price_value": 800, "category": "Accessoires", "link": "https://neolife-id-lions-team.netlify.app/?search=mixing-bottle"},
