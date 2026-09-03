@@ -181,5 +181,22 @@ app.post('/webhook', async (req, res) => {
 
 app.get('/', (req, res) => res.send('LIA V5.1 - Opérationnel'));
 
+app.get('/privacy', (req, res) => {
+  res.send(`
+    <h1>Politique de confidentialite - LIA NEOLIFE ID</h1>
+    <p>Nous collectons uniquement les messages WhatsApp (texte, audio, image) pour repondre aux clients via notre assistante LIA.</p>
+    <p>Aucune donnee n'est vendue ni partagee.</p>
+    <p>Contact pour suppression: neolife.id75@gmail.com / +233 53 020 7568</p>
+    <p>Suppression sous 24h.</p>
+  `);
+});
+
+app.get('/data-deletion', (req, res) => {
+  res.send(`
+    <h1>Suppression des donnees - LIA NEOLIFE ID</h1>
+    <p>Pour supprimer vos donnees, envoyez "supprimer mes donnees" au WhatsApp +233 53 020 7568 ou par email a neolife.id75@gmail.com</p>
+    <p>Vos donnees (historique chat) seront supprimees sous 24h.</p>
+  `);
+});
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Serveur à l'écoute sur le port ${PORT}`));
